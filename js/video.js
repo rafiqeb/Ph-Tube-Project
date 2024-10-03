@@ -19,9 +19,9 @@ function getTime(time){
 }
 
 //  Load vedio catagoris
-const loadVedio = () => {
+const loadVedio = (searchText = '') => {
     //    Fetch data
-    fetch('https://openapi.programming-hero.com/api/phero-tube/videos')
+    fetch(`https://openapi.programming-hero.com/api/phero-tube/videos?title=${searchText}`)
         .then(res => res.json())
         .then(data => displayVideo(data.videos))
         .catch(err => console.log(err))
@@ -51,7 +51,14 @@ const loadDetails = async (videoId) => {
 
 // Video display details
 const displayDetails = (video) => {
-    console.log(video)
+    const detailContent = document.getElementById('modal-content')
+    detailContent.innerHTML = `
+    <img src="${video.thumbnail}" alt="">
+    <p>${video.description}</p>
+    `
+    // show modal
+    // document.getElementById('showModalData').click();
+    document.getElementById('customModal').showModal()
 }
 
 //    Button color function
@@ -126,6 +133,10 @@ const displayCatagoris = (categories) => {
         catagorisContainer.append(div)
     });
 }
+
+document.getElementById('search-input').addEventListener('keyup', function(e){
+    loadVedio(e.target.value)
+})
 
 loadCatagoris()
 loadVedio()
